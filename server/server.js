@@ -10,8 +10,14 @@ app.use(express.static(publicPath));
 app.use(parser.json());
 
 
-
-app.use("/api/bucketlist", createRouter)
+MongoClient.connect('mongodb://localhost:27017')
+  .then( ( client ) => {
+    const db = client.db('bucketlist');
+    const bucketlistCollection = db.collection('bucketItem');
+    const bucketlistRouter = createRouter(bucketlistCollection);
+    app.use('/api/bucketlist', bucketlistRouter);
+  })
+  .catch(console.error);
 
 
 
