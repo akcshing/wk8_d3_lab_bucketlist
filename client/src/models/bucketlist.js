@@ -11,8 +11,11 @@ Bucketlist.prototype.bindEvents = function () {
     this.addItem(evt.detail)
   })
   PubSub.subscribe("BucketlistItemView:delete-item", (evt) => {
-    console.log(evt.detail)
+    // console.log(evt.detail)
     this.deleteItem(evt.detail)
+  })
+  PubSub.subscribe("BucketlistItemView:status-update", (evt) => {
+    this.updateItem(evt.detail._id, evt.detail)
   })
 };
 
@@ -39,6 +42,8 @@ Bucketlist.prototype.publish = function (bucketlist) {
  };
 
  Bucketlist.prototype.updateItem = function (id, newItem) {
+   delete newItem["_id"];
+   console.log("new item", newItem)
    this.request.update(id, newItem)
    .then(request => this.publish(request))
    .catch(console.error)

@@ -23,7 +23,8 @@ BucketFormView.prototype.createItem = function (form) {
   const newItem = {
     activity: form.activity.value,
     location: form.location.value,
-    cost: form.cost.value
+    cost: form.cost.value,
+    status: "not yet"
   };
   return newItem;
 };

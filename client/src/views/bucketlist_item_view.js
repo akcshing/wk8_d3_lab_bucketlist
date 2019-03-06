@@ -11,16 +11,19 @@ BucketlistItemView.prototype.render = function (item) {
   const location = this.createElement("h3", item.location);
   const activity = this.createElement("p", item.activity);
   const cost = this.createElement("p", item.cost);
-  const button = this.createElement("button", "delete")
+  const button = this.createElement("button", "delete");
+  const status = this.createElement("p", `visited: ${item.status}`);
 
-  this.deleteButton(button, item)
+  this.statusSet(status, item)
+  this.deleteButton(button, item);
 
-  bucketContainer.appendChild(location)
-  bucketContainer.appendChild(activity)
-  bucketContainer.appendChild(cost)
-  bucketContainer.appendChild(button)
+  bucketContainer.appendChild(location);
+  bucketContainer.appendChild(activity);
+  bucketContainer.appendChild(cost);
+  bucketContainer.appendChild(status);
+  bucketContainer.appendChild(button);
 
-  this.container.appendChild(bucketContainer)
+  this.container.appendChild(bucketContainer);
 
 };
 
@@ -32,12 +35,17 @@ BucketlistItemView.prototype.createElement = function (element, text) {
 
 BucketlistItemView.prototype.deleteButton = function (button, item) {
   button.value = item._id;
-  console.log(item)
   button.addEventListener('click', (evt) => {
     PubSub.publish("BucketlistItemView:delete-item", evt.target.value)
   })
   return button
-
 };
+
+BucketlistItemView.prototype.statusSet = function (status, item) {
+  status.addEventListener("click", (evt) => {
+    item.status = "Done";
+    PubSub.publish("BucketlistItemView:status-update", item)
+  })
+}
 
 module.exports = BucketlistItemView;
