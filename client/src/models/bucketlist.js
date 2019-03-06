@@ -6,6 +6,16 @@ const Bucketlist = function (url) {
   this.request = new RequestHelper(this.url)
 }
 
+Bucketlist.prototype.bindEvents = function () {
+  PubSub.subscribe("BucketFormView:form-submitted", (evt) => {
+    this.addItem(evt.detail)
+  })
+  PubSub.subscribe("BucketlistItemView:delete-item", (evt) => {
+    console.log(evt.detail)
+    this.deleteItem(evt.detail)
+  })
+};
+
 Bucketlist.prototype.publish = function (bucketlist) {
   PubSub.publish("Bucketlist:data-ready", bucketlist)
 };
